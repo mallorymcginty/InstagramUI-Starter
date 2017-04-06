@@ -33,7 +33,7 @@ class PostCell: UITableViewCell
    {
     self.postImageView.image = post.image
     postCaptionLabel.text = post.caption
-    numberOfLikesButton.setTitle("🖤 \(post.numberOfLikes) Likes", for: [])
+    numberOfLikesButton.setTitle("🖤 \(post.numberOfLikes!) Likes", for: [])
     timeAgoLabel.text = post.timeAgo
     
     

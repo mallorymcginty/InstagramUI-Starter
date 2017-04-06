@@ -18,6 +18,11 @@ import FirebaseAuth
 
 class CameraViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate
 {
+    let storage = FIRStorage.storage()
+    //let picRef = FIRStorage.child()
+    
+    
+    
     
     @IBOutlet weak var imgPhoto: UIImageView!
     
@@ -26,7 +31,7 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
     
     @IBAction func btnSavePhoto(_ sender: UIBarButtonItem)
     {
-         var ref: FIRDatabaseReference!
+        /* var ref: FIRDatabaseReference!
         let user = FIRAuth.auth()?.currentUser 
         ref = FIRDatabase.database().reference()
          let uid = user?.uid
@@ -53,15 +58,34 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
         //Get image in the image view and save it
          let imageData = UIImageJPEGRepresentation(imgPhoto.image!, 0.6)
         let compressedJPEGImage = UIImage(data: imageData!)
-        UIImageWriteToSavedPhotosAlbum(compressedJPEGImage!, nil, nil, nil)
+        UIImageWriteToSavedPhotosAlbum(compressedJPEGImage!, nil, nil, nil)*/
         
         
-    }
+    
     
     func uploadImageToFirebaseStorage(data: NSData)
     {
+       let storageRef = FIRStorage.storage().reference()
+        let  uploadMetadata = FIRStorageMetadata()
+        uploadMetadata.contentType = "image/jpeg"
+        storageRef.put(data as Data, metadata: uploadMetadata)
+        {
+            (metadata, error) in
+            if (error != nil)
+            {
+                print("Metadata error \(error?.localizedDescription)")
+            }
+            else
+            {
+                print(" Here is some metadata \(metadata)")
+            }
+        }
         
     }
+        
+        let vc = self.storyboard?.instantiateViewController(withIdentifier: "post")
+        self.present(vc!, animated: true, completion: nil)
+}
     
     @IBAction func btnTakePhoto(_ sender: UIButton)
     {
