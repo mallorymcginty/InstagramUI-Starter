@@ -19,6 +19,7 @@ class PostCell: UITableViewCell
     @IBOutlet weak var postCaptionLabel: UILabel!
     
     @IBOutlet weak var timeAgoLabel: UILabel!
+
     
     var post: Post!
         {
@@ -32,7 +33,7 @@ class PostCell: UITableViewCell
    {
     self.postImageView.image = post.image
     postCaptionLabel.text = post.caption
-    numberOfLikesButton.setTitle("Be the first to like this post", for: [])
+    numberOfLikesButton.setTitle("🖤 \(post.numberOfLikes) Likes", for: [])
     timeAgoLabel.text = post.timeAgo
     
     

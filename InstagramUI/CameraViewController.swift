@@ -7,23 +7,59 @@
 //
 
 import UIKit
+import Firebase
+import FirebaseStorage
+import FirebaseDatabase
+import FirebaseAuth
+
+
+
+
 
 class CameraViewController: UIViewController, UINavigationControllerDelegate, UIImagePickerControllerDelegate
 {
+    
     @IBOutlet weak var imgPhoto: UIImageView!
+    
+    
+    
     
     @IBAction func btnSavePhoto(_ sender: UIBarButtonItem)
     {
-        //Get image in the image view and save it 
-        let imageData = UIImageJPEGRepresentation(imgPhoto.image!, 0.6)
-        let compressedJPEGImage = UIImage(data: imageData!)
-        UIImageWriteToSavedPhotosAlbum(compressedJPEGImage!, nil, nil, nil)
+         var ref: FIRDatabaseReference!
+        let user = FIRAuth.auth()?.currentUser 
+        ref = FIRDatabase.database().reference()
+         let uid = user?.uid
+        
+       
+        
+        let post : [String : Any] =
+            ["photo": imgPhoto.image!]
+        
+        //Adds FB JSON node for incidentLog
+        
+        //SET FOR CURRENT USER
+        ref.child("posts").childByAutoId().setValue(post)
+        
+        imgPhoto.image = nil
+       
+    
+        
         
         //transition to post controller with image shown
         let vc = self.storyboard?.instantiateViewController(withIdentifier: "post")
         self.present(vc!, animated: true, completion: nil)
         
+        //Get image in the image view and save it
+         let imageData = UIImageJPEGRepresentation(imgPhoto.image!, 0.6)
+        let compressedJPEGImage = UIImage(data: imageData!)
+        UIImageWriteToSavedPhotosAlbum(compressedJPEGImage!, nil, nil, nil)
         
+        
+    }
+    
+    func uploadImageToFirebaseStorage(data: NSData)
+    {
         
     }
     
@@ -54,7 +90,7 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
     }
     
     
-    func  imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo image: UIImage!, editingInfo: [NSObject: AnyObject]!)
+    func  imagePickerController(_ picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject: AnyObject]!)
     {
     imgPhoto.image = image
     self.dismiss(animated: true, completion: nil)
@@ -63,7 +99,7 @@ class CameraViewController: UIViewController, UINavigationControllerDelegate, UI
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+       
         
     }
 
